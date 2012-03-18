@@ -1,0 +1,58 @@
+
+<html>
+<head>
+    <title>WebSocket Chat</title>
+    <script>
+      	if (!window.WebSocket)
+        	alert("NO WebSocket support");
+       	function $() { return document.getElementById(arguments[0]); }
+      	function $F() { return document.getElementById(arguments[0]).value; }
+     	function getKeyCode(ev) { if (window.event) return window.event.keyCode; return ev.keyCode; } 
+      	var ws = new WebSocket('ws://localhost:8080/TestJetty2/websocket');
+	ws.onopen = function(event){
+		alert('onopen');
+	}
+
+	ws.onmessage = function(event) {
+            
+	if (event.data){
+            var chat=$('chat');
+            var spanText = document.createElement('span');
+            spanText.className='text';
+            spanText.innerHTML=event.data;
+            var lineBreak = document.createElement('br');
+            chat.appendChild(spanText);
+            chat.appendChild(lineBreak);
+            chat.scrollTop = chat.scrollHeight - chat.clientHeight;   
+          }
+               
+        };
+
+        function newmessage (message){
+         if (this._ws)
+            ws.send(message);
+        };
+      	
+	function sendclick() 
+	{ 
+		if (ws)
+            		ws.send(document.getElementById("message").value);
+		document.getElementById('message').value=''; 
+	};
+   
+    </script>
+  
+</head>
+<body>
+
+<div id='chat'></div>
+  
+<div id='msg'>
+	<input id='message' type='text'/>
+	<input id='sendB' type='button' value='Send' onclick="sendclick()"/>
+</div>
+
+<script>
+</script>
+
+</body></html>
